@@ -1,6 +1,6 @@
 ---
 name: laptop-relay
-description: Run commands on the user's own laptop from a cloud Claude session through a git-based relay (relay/jobs -> relay/results on branch claude/friendly-lamport-y8hz5r of tharkacoding/om). Use whenever the user says to work on, take control of, or run something on "my laptop", asks to deploy to Vercel from their machine, check files/state on their computer, or says the cloud session can't reach their local environment - even if they never mention the relay.
+description: Run commands on the user's own laptop from a cloud Claude session through a git-based relay (relay/jobs then relay/results on branch claude/friendly-lamport-y8hz5r of tharkacoding/om). Use whenever the user says to work on, take control of, or run something on "my laptop", asks to deploy to Vercel from their machine, check files/state on their computer, or says the cloud session can't reach their local environment - even if they never mention the relay.
 ---
 
 # laptop-relay
