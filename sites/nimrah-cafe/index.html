@@ -52,6 +52,28 @@ footer{background:var(--brown);color:var(--cream2);text-align:center;padding:2re
 footer a{color:#e8b878}
 @media(min-width:700px){.grid{grid-template-columns:repeat(3,1fr)}.visit{grid-template-columns:1fr 1fr}section{padding:4.5rem 0}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* polish */
+.hero{position:relative;overflow:hidden;isolation:isolate}
+.hero>.wrap{position:relative;z-index:2}
+.hero::before{content:"";position:absolute;inset:0;z-index:0;background-image:url("data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%2760%27%20height=%2760%27%20viewBox=%270%200%2060%2060%27%20fill=%27%23e8b878%27%3E%3Ccircle%20cx=%2730%27%20cy=%2730%27%20r=%273%27/%3E%3Cpath%20d=%27M12%2012h8M16%208v8M44%2044h8M48%2040v8%27%20stroke=%27%23e8b878%27%20stroke-width=%272%27%20fill=%27none%27/%3E%3C/svg%3E"),radial-gradient(circle at 85% 0%,#e8b87838,transparent 55%);background-size:60px 60px,100% 100%;opacity:.55;animation:pdrift 40s linear infinite}
+@keyframes pdrift{to{background-position:240px 120px,0 0}}
+html.js .hero .wrap>*{opacity:0;transform:translateY(20px);animation:pin .8s cubic-bezier(.2,.7,.2,1) forwards}
+html.js .hero .wrap>*:nth-child(2){animation-delay:.12s}html.js .hero .wrap>*:nth-child(3){animation-delay:.24s}
+html.js .hero .wrap>*:nth-child(4){animation-delay:.36s}html.js .hero .wrap>*:nth-child(n+5){animation-delay:.48s}
+@keyframes pin{to{opacity:1;transform:none}}
+.card{transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease}
+.card:hover{transform:translateY(-5px);box-shadow:0 14px 30px rgba(0,0,0,.12)}
+.btn{transition:transform .2s ease,box-shadow .2s ease,background .2s ease}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(0,0,0,.18)}
+.btn:active{transform:none}
+section h2::after{content:"";display:block;width:56px;height:3px;border-radius:3px;background:#e8b878;margin:.45em 0 0}
+.center h2::after,h2.center::after,.hero h2::after{margin-left:auto;margin-right:auto}
+section{padding-top:clamp(56px,9vw,104px);padding-bottom:clamp(56px,9vw,104px)}
+html.js .rv{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
+html.js .rv.in{opacity:1;transform:none}
+img,svg{max-width:100%}
+@media(prefers-reduced-motion:reduce){.hero::before{animation:none}html.js .hero .wrap>*{animation:none;opacity:1;transform:none}html.js .rv{opacity:1;transform:none;transition:none}.card,.btn{transition:none}.card:hover,.btn:hover{transform:none}}
 </style>
 </head>
 <body>
@@ -129,5 +151,14 @@ footer a{color:#e8b878}
     <p class="note" style="color:var(--cream2)">Concept website design &mdash; not yet official</p>
   </div>
 </footer>
+<script>
+(function(){document.documentElement.classList.add('js');
+var els=document.querySelectorAll('section .card,section h2,section .lead,section .sub,section form,.rating,.visit,.loc');
+els.forEach(function(e,i){e.classList.add('rv');e.style.transitionDelay=((i%3)*80)+'ms'});
+if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in')});return}
+var io=new IntersectionObserver(function(r){r.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}})},{threshold:.12});
+els.forEach(function(e){io.observe(e)});
+})();
+</script>
 </body>
 </html>
