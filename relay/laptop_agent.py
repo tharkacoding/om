@@ -31,17 +31,19 @@ def check(cmd):
     return None
 
 
-def run(job, auto):
+def run(job, auto, full=False):
     cmd = job["cmd"]
-    err = check(cmd)
+    err = None if full else check(cmd)
     if err:
         return {"ok": False, "error": err}
+    if full:
+        auto = False  # full mode always asks
     print(f"\nClaude wants to run in {ROOT}:\n  {cmd}")
     if not auto and input("Allow? [y/N] ").strip().lower() != "y":
         return {"ok": False, "error": "declined by user"}
     try:
-        r = subprocess.run(shlex.split(cmd), cwd=ROOT, capture_output=True, text=True,
-                           timeout=300, shell=False)
+        r = subprocess.run(cmd if full else shlex.split(cmd), cwd=ROOT, capture_output=True,
+                           text=True, timeout=300, shell=full)
         return {"ok": r.returncode == 0, "code": r.returncode,
                 "stdout": r.stdout[-20000:], "stderr": r.stderr[-20000:]}
     except Exception as e:
@@ -51,6 +53,7 @@ def run(job, auto):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--branch", default="claude/friendly-lamport-y8hz5r")
+    ap.add_argument("--full", action="store_true", help="run any command (pipes, &&, any program) - still asks y/N every time")
     ap.add_argument("--auto", action="store_true", help="skip per-command prompts (not recommended)")
     a = ap.parse_args()
     git("checkout", a.branch)
@@ -64,7 +67,7 @@ def main():
             if not f.endswith(".json") or os.path.exists(os.path.join(results, f)):
                 continue
             job = json.load(open(os.path.join(jobs, f)))
-            out = run(job, a.auto)
+            out = run(job, a.auto, a.full)
             json.dump(out, open(os.path.join(results, f), "w"), indent=1)
             git("add", "relay/results")
             git("commit", "-m", f"relay result {f}")

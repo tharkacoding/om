@@ -7,4 +7,4 @@ gh auth status >/dev/null 2>&1 || { echo "Run: gh auth login"; exit 1; }
 if [ -d "$DIR/.git" ]; then git -C "$DIR" fetch origin "$BR" && git -C "$DIR" checkout "$BR" && git -C "$DIR" pull --ff-only origin "$BR"
 else gh repo clone tharkacoding/om "$DIR" -- --branch "$BR"; fi
 echo "Relay starting. Every command Claude sends will ask you [y/N]. Ctrl+C stops it."
-cd "$DIR" && exec python3 relay/laptop_agent.py --branch "$BR"
+cd "$DIR" && exec python3 relay/laptop_agent.py --branch "$BR" ${FULL:+--full}
